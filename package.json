@@ -1,0 +1,71 @@
+{
+  "name": "canban_board",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": ".",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "classnames": "^2.5.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.21.3",
+    "react-scripts": "5.0.1",
+    "swiper": "^11.0.5",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
+    "format": "prettier . --ignore-path .gitignore --write",
+    "lint": "eslint . --ignore-path .gitignore --fix",
+    "fix-code": "npm run format & npm run lint"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@mate-academy/eslint-config-react-typescript": "^1.0.13",
+    "@mate-academy/students-ts-config": "0.0.4",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.18.71",
+    "@types/react": "^18.2.48",
+    "@types/react-dom": "^18.2.18",
+    "@typescript-eslint/eslint-plugin": "^5.0.0",
+    "@typescript-eslint/parser": "^5.0.0",
+    "eslint": "^8.1.0",
+    "eslint-config-standard-with-typescript": "^43.0.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.33.2",
+    "gh-pages": "^6.1.1",
+    "husky": "^8.0.3",
+    "lint-staged": "13.2.3",
+    "prettier": "^3.2.4",
+    "sass": "^1.70.0",
+    "typescript": "^4.6.3"
+  },
+  "lint-staged": {
+    "*.ts": "npm run fix-code",
+    "*.tsx": "npm run fix-code"
+  }
+}
