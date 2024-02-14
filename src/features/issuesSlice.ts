@@ -6,7 +6,7 @@ import { Issue } from '../types/Issue';
 
 const initialState: IssuesState = {
   newIssues: [],
-  doneIssues: [],
+  inProgressIssues: [],
   closedIssues: [],
   loading: false,
   error: '',
@@ -29,7 +29,7 @@ const issueSlice = createSlice({
     builder.addCase(init.fulfilled, (state, action) => {
       state.newIssues = action.payload.newIssues;
       state.closedIssues = action.payload.closedIssues;
-      state.doneIssues = action.payload.doneIssues;
+      state.inProgressIssues = action.payload.inProgressIssues;
       state.loading = false;
     });
 

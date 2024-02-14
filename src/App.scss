@@ -1,0 +1,23 @@
+@import '~bootstrap/scss/bootstrap';
+
+.white-box {
+  padding-block: 10px;
+  padding-inline: 20px;
+
+  background-color: #fff;
+  border-radius: 20px;
+}
+
+.b1 {
+  padding-block: 1px;
+  padding-inline: 1px;
+
+  border-radius: 23px;
+}
+
+.b2 {
+  padding-block: 2px;
+  padding-inline: 2px;
+
+  border-radius: 18px;
+}
