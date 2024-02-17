@@ -1,3 +1,4 @@
+// #region Imports
 import {
   Button,
   Col,
@@ -5,20 +6,67 @@ import {
   Form,
   Row,
 } from 'react-bootstrap';
-import { useState } from 'react';
-import { useAppDispatch } from '../../utils/hooks';
-import { init } from '../../features/issuesSlice';
-import normalizeUrl from '../../utils/normalizeUrl';
+import { useEffect, useState } from 'react';
+import { useAppDispatch } from '../../utils/hooks/hooks';
+import { addRepoLink, init, updateIssues } from '../../features/issuesSlice';
+import normalizeUrl from '../../utils/helpers/normalizeUrl';
+import parseDataFromStorage from '../../utils/helpers/parseDataFromStorage';
+import Issues from '../../types/Issues';
+// #endregion
 
 const InputArea: React.FC = () => {
   const dispatch = useAppDispatch();
+
   const [repoLink, setRepoLink] = useState('');
+  const [isWriting, setIsWriting] = useState(false);
+
+  useEffect(() => {
+    const repoLinkInStorage = localStorage.getItem('repoLink');
+
+    if (repoLinkInStorage) {
+      setRepoLink(repoLinkInStorage);
+    }
+  }, []);
 
   const loadIssues = () => {
+    setIsWriting(false);
+
     const linkToSet = normalizeUrl(repoLink);
+
+    localStorage.setItem('repoLink', repoLink);
+
+    dispatch(addRepoLink(repoLink));
+
+    const issuesFromStorage
+      = parseDataFromStorage<Issues, boolean>(repoLink, false);
+
+    if (issuesFromStorage) {
+      dispatch(updateIssues({
+        issues: issuesFromStorage.newIssues,
+        columnName: 'newIssues',
+      }));
+
+      dispatch(updateIssues({
+        issues: issuesFromStorage.inProgressIssues,
+        columnName: 'inProgressIssues',
+      }));
+
+      dispatch(updateIssues({
+        issues: issuesFromStorage.closedIssues,
+        columnName: 'closedIssues',
+      }));
+
+      return;
+    }
 
     dispatch(init(linkToSet));
   };
+
+  useEffect(() => {
+    if (!isWriting) {
+      loadIssues();
+    }
+  }, [repoLink]);
 
   return (
     <Container className="mx-auto mt-5">
@@ -28,7 +76,10 @@ const InputArea: React.FC = () => {
             type="text"
             placeholder="Enter repo URL"
             value={repoLink}
-            onChange={(e) => setRepoLink(e.target.value)}
+            onChange={(e) => {
+              setRepoLink(e.target.value.trim());
+              setIsWriting(true);
+            }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
                 loadIssues();
