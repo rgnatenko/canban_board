@@ -6,4 +6,5 @@ export interface IssuesState {
   closedIssues: Issue[];
   loading: boolean,
   error: string,
+  repoLink: string,
 }
