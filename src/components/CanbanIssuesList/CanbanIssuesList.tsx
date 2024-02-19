@@ -14,12 +14,16 @@ type Props = {
 
 const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
   return (
-    <div style={{ width: '33%' }}>
+    <div
+      style={{ width: '33%' }}
+      className="mt-5"
+    >
       <Droppable droppableId={columnName}>
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
+            id="droppable-area"
           >
             <Col><h4>{title}</h4></Col>
 
@@ -31,6 +35,7 @@ const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
               >
                 {(draggProvided, snapshot) => (
                   <div
+                    id="draggable-item"
                     ref={draggProvided.innerRef}
                     {...draggProvided.draggableProps}
                     {...draggProvided.dragHandleProps}

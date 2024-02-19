@@ -9,6 +9,8 @@ import { useAppDispatch, useAppSelector } from '../../utils/hooks/hooks';
 import drag from '../../utils/helpers/drag';
 import { updateIssues } from '../../features/issuesSlice';
 import CanbanIssuesList from '../CanbanIssuesList/CanbanIssuesList';
+import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
+import normalizeUrl from '../../utils/helpers/normalizeUrl';
 
 const CanbanTable: React.FC = () => {
   const {
@@ -47,8 +49,16 @@ const CanbanTable: React.FC = () => {
     });
   };
 
+  const link = normalizeUrl(repoLink);
+
   return (
-    <Container className="mx-auto mt-5">
+    <Container className="mx-auto mt-3" id="issues">
+      {link && (
+        <BreadCrumbs
+          orgLink={link.organizationLink}
+          repoLink={link.repositoryLink}
+        />
+      )}
       <Row>
         <DragDropContext onDragEnd={handleDragEnd}>
           <CanbanIssuesList

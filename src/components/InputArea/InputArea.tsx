@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+/* eslint-disable react-hooks/exhaustive-deps */
 // #region Imports
 import {
   Button,
@@ -31,35 +33,43 @@ const InputArea: React.FC = () => {
   const loadIssues = () => {
     setIsWriting(false);
 
-    const linkToSet = normalizeUrl(repoLink);
+    try {
+      const { fullLink } = normalizeUrl(repoLink);
 
-    localStorage.setItem('repoLink', repoLink);
+      if (!fullLink) {
+        return;
+      }
 
-    dispatch(addRepoLink(repoLink));
+      localStorage.setItem('repoLink', repoLink);
 
-    const issuesFromStorage
-      = parseDataFromStorage<Issues, boolean>(repoLink, false);
+      dispatch(addRepoLink(repoLink));
 
-    if (issuesFromStorage) {
-      dispatch(updateIssues({
-        issues: issuesFromStorage.newIssues,
-        columnName: 'newIssues',
-      }));
+      const issuesFromStorage
+        = parseDataFromStorage<Issues, boolean>(repoLink, false);
 
-      dispatch(updateIssues({
-        issues: issuesFromStorage.inProgressIssues,
-        columnName: 'inProgressIssues',
-      }));
+      if (issuesFromStorage) {
+        dispatch(updateIssues({
+          issues: issuesFromStorage.newIssues,
+          columnName: 'newIssues',
+        }));
 
-      dispatch(updateIssues({
-        issues: issuesFromStorage.closedIssues,
-        columnName: 'closedIssues',
-      }));
+        dispatch(updateIssues({
+          issues: issuesFromStorage.inProgressIssues,
+          columnName: 'inProgressIssues',
+        }));
 
-      return;
+        dispatch(updateIssues({
+          issues: issuesFromStorage.closedIssues,
+          columnName: 'closedIssues',
+        }));
+
+        return;
+      }
+
+      dispatch(init(fullLink));
+    } catch (error) {
+      console.log(error);
     }
-
-    dispatch(init(linkToSet));
   };
 
   useEffect(() => {

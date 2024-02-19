@@ -15,7 +15,7 @@ const CanbanIssue: React.FC<Props> = ({ issue, style }) => {
 
   return (
     <Card
-      className="mb-2 py-2 px-3 rounded-4"
+      className="mb-3 py-2 px-3 rounded-4"
       style={style}
     >
       <h6>
