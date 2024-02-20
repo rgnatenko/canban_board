@@ -1,23 +1,20 @@
 @import '~bootstrap/scss/bootstrap';
 
-.white-box {
-  padding-block: 10px;
-  padding-inline: 20px;
-
-  background-color: #fff;
-  border-radius: 20px;
+* {
+  font-family: 'Roboto Mono' ,serif;
+  font-weight: 500;
 }
 
-.b1 {
-  padding-block: 1px;
-  padding-inline: 1px;
-
-  border-radius: 23px;
+p {
+  margin: 0;
+  padding: 0;
 }
 
-.b2 {
-  padding-block: 2px;
-  padding-inline: 2px;
+a {
+  text-decoration: none;
+}
 
-  border-radius: 18px;
+.link::before {
+  content: ">" !important;
+  color: blue !important;
 }

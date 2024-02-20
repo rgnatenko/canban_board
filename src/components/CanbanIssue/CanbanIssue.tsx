@@ -15,16 +15,25 @@ const CanbanIssue: React.FC<Props> = ({ issue, style }) => {
 
   return (
     <Card
-      className="mb-3 py-2 px-3 rounded-4"
+      className="mb-3 py-3 px-3 rounded-5
+      border border-dark d-flex flex-column gap-1"
       style={style}
     >
       <h6>
         {issue.title}
       </h6>
 
-      <p>{`#${issue.number} ${openedAt}`}</p>
+      <p
+        className="text-secondary"
+      >
+        {`#${issue.number} ${openedAt}`}
+      </p>
 
-      <p>{`${issue.user.login} | Comments: ${issue.comments}`}</p>
+      <p
+        className="text-secondary"
+      >
+        {`${issue.user.login} | Comments: ${issue.comments}`}
+      </p>
     </Card>
   );
 };

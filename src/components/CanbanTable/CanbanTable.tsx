@@ -52,7 +52,10 @@ const CanbanTable: React.FC = () => {
   const link = normalizeUrl(repoLink);
 
   return (
-    <Container className="mx-auto mt-3" id="issues">
+    <Container
+      className="mx-auto mt-3"
+      id="issues"
+    >
       {link && (
         <BreadCrumbs
           orgLink={link.organizationLink}

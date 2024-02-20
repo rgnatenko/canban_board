@@ -14,19 +14,20 @@ type Props = {
 
 const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
   return (
-    <div
-      style={{ width: '33%' }}
+    <Col
+      xl={4}
       className="mt-5"
     >
+      <Col className="text-center mb-4"><h4>{title}</h4></Col>
+
       <Droppable droppableId={columnName}>
         {(provided) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
             id="droppable-area"
+            className="px-4 py-4 bg-secondary-subtle border border-dark"
           >
-            <Col><h4>{title}</h4></Col>
-
             {issues.map((issue, index) => (
               <Draggable
                 key={`${issue.id}/${issue.sortIndex}`}
@@ -48,12 +49,11 @@ const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
                 )}
               </Draggable>
             ))}
-
             {provided.placeholder}
           </div>
         )}
       </Droppable>
-    </div>
+    </Col>
   );
 };
 

@@ -18,7 +18,7 @@ const BreadCrumbs: React.FC<Props> = ({ orgLink, repoLink }) => {
         {orgLink.name}
       </BreadcrumbItem>
 
-      <BreadcrumbItem href={repoLink.link} target="_blank">
+      <BreadcrumbItem className="link" href={repoLink.link} target="_blank">
         {repoLink.name}
       </BreadcrumbItem>
     </Breadcrumb>

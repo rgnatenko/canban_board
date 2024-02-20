@@ -8,7 +8,7 @@ import {
   Form,
   Row,
 } from 'react-bootstrap';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch } from '../../utils/hooks/hooks';
 import { addRepoLink, init, updateIssues } from '../../features/issuesSlice';
 import normalizeUrl from '../../utils/helpers/normalizeUrl';
@@ -22,11 +22,17 @@ const InputArea: React.FC = () => {
   const [repoLink, setRepoLink] = useState('');
   const [isWriting, setIsWriting] = useState(false);
 
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   useEffect(() => {
     const repoLinkInStorage = localStorage.getItem('repoLink');
 
     if (repoLinkInStorage) {
       setRepoLink(repoLinkInStorage);
+    }
+
+    if (inputRef.current) {
+      inputRef.current.focus();
     }
   }, []);
 
@@ -83,8 +89,10 @@ const InputArea: React.FC = () => {
       <Row>
         <Col xs={10}>
           <Form.Control
+            ref={inputRef}
             type="text"
             placeholder="Enter repo URL"
+            className="border border-dark rounded-0"
             value={repoLink}
             onChange={(e) => {
               setRepoLink(e.target.value.trim());
@@ -99,7 +107,8 @@ const InputArea: React.FC = () => {
         </Col>
         <Col>
           <Button
-            className="w-100 h-100"
+            className="w-100 h-100 border
+            border-dark rounded-0 btn btn-light"
             onClick={loadIssues}
           >
             Load
