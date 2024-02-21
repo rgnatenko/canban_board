@@ -6,8 +6,8 @@ import InputArea from './components/InputArea/InputArea';
 import CanbanTable from './components/CanbanTable/CanbanTable';
 
 const App: React.FC = () => {
-  const { newIssues, loading } = useAppSelector(state => state.issues);
-  const issuesAreLoaded = newIssues.length > 0 && !loading;
+  const { newIssues, loading, error } = useAppSelector(state => state.issues);
+  const issuesAreLoaded = newIssues.length > 0 && !loading && !error;
 
   return (
     <div className="App">

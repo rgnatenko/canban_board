@@ -38,6 +38,22 @@ const issueSlice = createSlice({
 
       state.repoLink = link;
     },
+
+    setLoading: (
+      state, action: PayloadAction<boolean>,
+    ) => {
+      const isLoading = action.payload;
+
+      state.loading = isLoading;
+    },
+
+    setErrorMessage: (
+      state, action: PayloadAction<string>,
+    ) => {
+      const error = action.payload;
+
+      state.error = error;
+    },
   },
 
   extraReducers: (builder) => {
@@ -68,6 +84,7 @@ const issueSlice = createSlice({
         });
 
       state.loading = false;
+      state.error = '';
     });
 
     builder.addCase(init.rejected, (state) => {
@@ -79,7 +96,12 @@ const issueSlice = createSlice({
 
 // export const { reducer: issueReducer } = issueSlice;
 
-export const { updateIssues, addRepoLink } = issueSlice.actions;
+export const {
+  updateIssues,
+  addRepoLink,
+  setLoading,
+  setErrorMessage,
+} = issueSlice.actions;
 
 export const issueReducer = issueSlice.reducer;
 

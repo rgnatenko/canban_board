@@ -8,16 +8,25 @@ import {
   Form,
   Row,
 } from 'react-bootstrap';
+import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '../../utils/hooks/hooks';
-import { addRepoLink, init, updateIssues } from '../../features/issuesSlice';
+import { useAppDispatch, useAppSelector } from '../../utils/hooks/hooks';
+import {
+  addRepoLink,
+  init,
+  setErrorMessage,
+  setLoading,
+  updateIssues,
+} from '../../features/issuesSlice';
 import normalizeUrl from '../../utils/helpers/normalizeUrl';
 import parseDataFromStorage from '../../utils/helpers/parseDataFromStorage';
 import Issues from '../../types/Issues';
+import validateGitHubAPI from '../../utils/helpers/validateGithubApiUrl';
 // #endregion
 
 const InputArea: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { error } = useAppSelector(state => state.issues);
 
   const [repoLink, setRepoLink] = useState('');
   const [isWriting, setIsWriting] = useState(false);
@@ -39,42 +48,53 @@ const InputArea: React.FC = () => {
   const loadIssues = () => {
     setIsWriting(false);
 
-    try {
+    if (repoLink) {
       const { fullLink } = normalizeUrl(repoLink);
 
-      if (!fullLink) {
-        return;
-      }
+      dispatch(setLoading(true));
 
-      localStorage.setItem('repoLink', repoLink);
+      validateGitHubAPI(fullLink)
+        .then(result => {
+          localStorage.setItem('repoLink', repoLink);
 
-      dispatch(addRepoLink(repoLink));
+          if (result) {
+            dispatch(addRepoLink(repoLink));
 
-      const issuesFromStorage
-        = parseDataFromStorage<Issues, boolean>(repoLink, false);
+            const issuesFromStorage
+              = parseDataFromStorage<Issues, boolean>(repoLink, false);
 
-      if (issuesFromStorage) {
-        dispatch(updateIssues({
-          issues: issuesFromStorage.newIssues,
-          columnName: 'newIssues',
-        }));
+            if (issuesFromStorage) {
+              dispatch(updateIssues({
+                issues: issuesFromStorage.newIssues,
+                columnName: 'newIssues',
+              }));
 
-        dispatch(updateIssues({
-          issues: issuesFromStorage.inProgressIssues,
-          columnName: 'inProgressIssues',
-        }));
+              dispatch(updateIssues({
+                issues: issuesFromStorage.inProgressIssues,
+                columnName: 'inProgressIssues',
+              }));
 
-        dispatch(updateIssues({
-          issues: issuesFromStorage.closedIssues,
-          columnName: 'closedIssues',
-        }));
+              dispatch(updateIssues({
+                issues: issuesFromStorage.closedIssues,
+                columnName: 'closedIssues',
+              }));
 
-        return;
-      }
+              dispatch(setLoading(false));
+              dispatch(setErrorMessage(''));
 
-      dispatch(init(fullLink));
-    } catch (error) {
-      console.log(error);
+              return;
+            }
+
+            dispatch(init(fullLink));
+          } else {
+            const example = 'https://github.com/organization/repository';
+            const errorMessage = `Invalid link,
+            please try again, here's example, how your link should look: ${example}`;
+
+            dispatch(setLoading(false));
+            dispatch(setErrorMessage(errorMessage));
+          }
+        });
     }
   };
 
@@ -92,7 +112,10 @@ const InputArea: React.FC = () => {
             ref={inputRef}
             type="text"
             placeholder="Enter repo URL"
-            className="border border-dark rounded-0"
+            className={classNames('border rounded-0 mb-3', {
+              'border-danger': error,
+              'border-dark': !error,
+            })}
             value={repoLink}
             onChange={(e) => {
               setRepoLink(e.target.value.trim());
@@ -115,6 +138,12 @@ const InputArea: React.FC = () => {
           </Button>
         </Col>
       </Row>
+
+      {error && (
+        <p className="text-danger">
+          {error}
+        </p>
+      )}
     </Container>
   );
 };
