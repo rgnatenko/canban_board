@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* eslint-disable react-hooks/exhaustive-deps */
 // #region Imports
 import {
@@ -112,7 +111,7 @@ const InputArea: React.FC = () => {
             ref={inputRef}
             type="text"
             placeholder="Enter repo URL"
-            className={classNames('border rounded-0 mb-3', {
+            className={classNames('border rounded-0', {
               'border-danger': error,
               'border-dark': !error,
             })}
@@ -140,7 +139,7 @@ const InputArea: React.FC = () => {
       </Row>
 
       {error && (
-        <p className="text-danger">
+        <p className="text-danger  mt-3">
           {error}
         </p>
       )}
