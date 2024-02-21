@@ -1,10 +1,8 @@
-/* eslint-disable no-console */
 import React from 'react';
 import { Col } from 'react-bootstrap';
 import { Draggable, Droppable } from 'react-beautiful-dnd';
 import { Column, Issue } from '../../types/Issue';
 import CanbanIssue from '../CanbanIssue/CanbanIssue';
-import getItemStyle from '../../utils/helpers/getIssueStyle';
 
 type Props = {
   issues: Issue[]
@@ -34,7 +32,7 @@ const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
                 draggableId={issue.id.toString()}
                 index={index}
               >
-                {(draggProvided, snapshot) => (
+                {(draggProvided) => (
                   <div
                     id="draggable-item"
                     ref={draggProvided.innerRef}
@@ -43,7 +41,6 @@ const CanbanIssuesList: React.FC<Props> = ({ issues, columnName, title }) => {
                   >
                     <CanbanIssue
                       issue={issue}
-                      style={getItemStyle(snapshot.isDragging)}
                     />
                   </div>
                 )}
