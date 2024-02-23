@@ -94,8 +94,6 @@ const issueSlice = createSlice({
   },
 });
 
-// export const { reducer: issueReducer } = issueSlice;
-
 export const {
   updateIssues,
   addRepoLink,
