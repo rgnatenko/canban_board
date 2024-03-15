@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import { Spinner, Container } from 'react-bootstrap';
 import './App.scss';
-import { useAppSelector } from './utils/hooks/hooks';
 import InputArea from './components/InputArea/InputArea';
 import CanbanTable from './components/CanbanTable/CanbanTable';
+import { useIssues } from './redux/selectors';
 
 const App: React.FC = () => {
-  const { newIssues, loading, error } = useAppSelector(state => state.issues);
+  const { newIssues, loading, error } = useIssues();
   const issuesAreLoaded = newIssues.length > 0 && !loading && !error;
 
   return (

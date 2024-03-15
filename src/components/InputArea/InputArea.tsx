@@ -9,23 +9,16 @@ import {
 } from 'react-bootstrap';
 import classNames from 'classnames';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../utils/hooks/hooks';
 import {
-  addRepoLink,
-  init,
-  setErrorMessage,
-  setLoading,
-  updateIssues,
-} from '../../features/issuesSlice';
-import normalizeUrl from '../../utils/helpers/normalizeUrl';
-import parseDataFromStorage from '../../utils/helpers/parseDataFromStorage';
-import Issues from '../../types/Issues';
-import validateGitHubAPI from '../../utils/helpers/validateGithubApiUrl';
+  useAppDispatch,
+} from '../../redux/reduxHooks/reduxHooks';
+import { useIssues } from '../../redux/selectors';
+import loadIssues from '../../utils/helpers/loadIssues';
 // #endregion
 
 const InputArea: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { error } = useAppSelector(state => state.issues);
+  const { error } = useIssues();
 
   const [repoLink, setRepoLink] = useState('');
   const [isWriting, setIsWriting] = useState(false);
@@ -44,62 +37,15 @@ const InputArea: React.FC = () => {
     }
   }, []);
 
-  const loadIssues = () => {
-    setIsWriting(false);
-
-    if (repoLink) {
-      const { fullLink } = normalizeUrl(repoLink);
-
-      dispatch(setLoading(true));
-
-      validateGitHubAPI(fullLink)
-        .then(result => {
-          localStorage.setItem('repoLink', repoLink);
-
-          if (result) {
-            dispatch(addRepoLink(repoLink));
-
-            const issuesFromStorage
-              = parseDataFromStorage<Issues, boolean>(repoLink, false);
-
-            if (issuesFromStorage) {
-              dispatch(updateIssues({
-                issues: issuesFromStorage.newIssues,
-                columnName: 'newIssues',
-              }));
-
-              dispatch(updateIssues({
-                issues: issuesFromStorage.inProgressIssues,
-                columnName: 'inProgressIssues',
-              }));
-
-              dispatch(updateIssues({
-                issues: issuesFromStorage.closedIssues,
-                columnName: 'closedIssues',
-              }));
-
-              dispatch(setLoading(false));
-              dispatch(setErrorMessage(''));
-
-              return;
-            }
-
-            dispatch(init(fullLink));
-          } else {
-            const example = 'https://github.com/organization/repository';
-            const errorMessage = `Invalid link,
-            please try again, here's example, how your link should look: ${example}`;
-
-            dispatch(setLoading(false));
-            dispatch(setErrorMessage(errorMessage));
-          }
-        });
-    }
-  };
+  const load = () => loadIssues({
+    setIsWriting,
+    repoLink,
+    dispatch,
+  });
 
   useEffect(() => {
     if (!isWriting) {
-      loadIssues();
+      load();
     }
   }, [repoLink]);
 
@@ -122,7 +68,7 @@ const InputArea: React.FC = () => {
             }}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
-                loadIssues();
+                load();
               }
             }}
           />
@@ -131,7 +77,7 @@ const InputArea: React.FC = () => {
           <Button
             className="w-100 h-100 border
             border-dark rounded-0 btn btn-light"
-            onClick={loadIssues}
+            onClick={load}
           >
             Load
           </Button>

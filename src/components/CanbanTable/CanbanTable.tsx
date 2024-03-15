@@ -5,12 +5,15 @@ import {
   DropResult,
 } from 'react-beautiful-dnd';
 import { Column, Issue } from '../../types/Issue';
-import { useAppDispatch, useAppSelector } from '../../utils/hooks/hooks';
+import {
+  useAppDispatch,
+} from '../../redux/reduxHooks/reduxHooks';
 import drag from '../../utils/helpers/drag';
-import { updateIssues } from '../../features/issuesSlice';
 import CanbanIssuesList from '../CanbanIssuesList/CanbanIssuesList';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
 import normalizeUrl from '../../utils/helpers/normalizeUrl';
+import { updateIssues } from '../../redux/features/issuesSlice';
+import { useIssues } from '../../redux/selectors';
 
 const CanbanTable: React.FC = () => {
   const {
@@ -19,7 +22,7 @@ const CanbanTable: React.FC = () => {
     closedIssues,
     repoLink,
   }
-    = useAppSelector(state => state.issues);
+    = useIssues();
   const dispatch = useAppDispatch();
 
   const issues = useMemo(() => ({

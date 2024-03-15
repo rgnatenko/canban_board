@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { IssuesState } from '../types/IssuesState';
-import { client } from '../utils/fetchClient/fetchClient';
-import { Column, Issue } from '../types/Issue';
+import { IssuesState } from '../../types/IssuesState';
+import { client } from '../../utils/fetchClient/fetchClient';
+import { Column, Issue } from '../../types/Issue';
 
 const initialState: IssuesState = {
   newIssues: [],
@@ -62,26 +62,9 @@ const issueSlice = createSlice({
     });
 
     builder.addCase(init.fulfilled, (state, action) => {
-      state.newIssues = action.payload.newIssues
-        .map(issue => {
-          const sortIndex = action.payload.newIssues.indexOf(issue);
-
-          return { ...issue, column: 'newIssues', sortIndex };
-        });
-
-      state.closedIssues = action.payload.closedIssues
-        .map(issue => {
-          const sortIndex = action.payload.closedIssues.indexOf(issue);
-
-          return { ...issue, column: 'closedIssues', sortIndex };
-        });
-
-      state.inProgressIssues = action.payload.inProgressIssues
-        .map(issue => {
-          const sortIndex = action.payload.inProgressIssues.indexOf(issue);
-
-          return { ...issue, column: 'inProgressIssues', sortIndex };
-        });
+      state.newIssues = action.payload.newIssues;
+      state.closedIssues = action.payload.closedIssues;
+      state.inProgressIssues = action.payload.inProgressIssues;
 
       state.loading = false;
       state.error = '';
