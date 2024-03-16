@@ -1,8 +1,10 @@
+/* eslint-disable no-useless-return */
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IssuesState } from '../../types/IssuesState';
 import { client } from '../../utils/fetchClient/fetchClient';
 import { Column, Issue } from '../../types/Issue';
+import getIssuesFromStorage from '../../utils/helpers/getIssuesFromStorage';
 
 const initialState: IssuesState = {
   newIssues: [],
@@ -38,41 +40,47 @@ const issueSlice = createSlice({
 
       state.repoLink = link;
     },
-
-    setLoading: (
-      state, action: PayloadAction<boolean>,
-    ) => {
-      const isLoading = action.payload;
-
-      state.loading = isLoading;
-    },
-
-    setErrorMessage: (
-      state, action: PayloadAction<string>,
-    ) => {
-      const error = action.payload;
-
-      state.error = error;
-    },
   },
 
   extraReducers: (builder) => {
     builder.addCase(init.pending, (state) => {
       state.loading = true;
-    });
-
-    builder.addCase(init.fulfilled, (state, action) => {
-      state.newIssues = action.payload.newIssues;
-      state.closedIssues = action.payload.closedIssues;
-      state.inProgressIssues = action.payload.inProgressIssues;
-
-      state.loading = false;
       state.error = '';
     });
 
-    builder.addCase(init.rejected, (state) => {
+    builder.addCase(init.fulfilled, (state, action) => {
       state.loading = false;
-      state.error = "Can't load newIssuess";
+      state.error = '';
+
+      localStorage.setItem('repoLink', state.repoLink);
+
+      const {
+        issuesFromStorage,
+        newIssuesToSet,
+        closedIssuesToSet,
+        inProgressIssuesToSet,
+      } = getIssuesFromStorage(state.repoLink);
+
+      if (issuesFromStorage) {
+        Object.assign(state, {
+          newIssues: newIssuesToSet,
+          closedIssues: closedIssuesToSet,
+          inProgressIssues: inProgressIssuesToSet,
+        });
+
+        return;
+      }
+
+      Object.assign(state, action.payload);
+    });
+
+    builder.addCase(init.rejected, (state) => {
+      const example = 'https://github.com/organization/repository';
+      const errorMessage = `Invalid link,
+        please try again, here's example, how your link should look: ${example}`;
+
+      state.loading = false;
+      state.error = errorMessage;
     });
   },
 });
@@ -80,8 +88,6 @@ const issueSlice = createSlice({
 export const {
   updateIssues,
   addRepoLink,
-  setLoading,
-  setErrorMessage,
 } = issueSlice.actions;
 
 export const issueReducer = issueSlice.reducer;

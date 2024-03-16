@@ -13,7 +13,8 @@ import {
   useAppDispatch,
 } from '../../redux/reduxHooks/reduxHooks';
 import { useIssues } from '../../redux/selectors';
-import loadIssues from '../../utils/helpers/loadIssues';
+import { addRepoLink, init } from '../../redux/features/issuesSlice';
+import normalizeUrl from '../../utils/helpers/normalizeUrl';
 // #endregion
 
 const InputArea: React.FC = () => {
@@ -37,11 +38,27 @@ const InputArea: React.FC = () => {
     }
   }, []);
 
-  const load = () => loadIssues({
-    setIsWriting,
-    repoLink,
-    dispatch,
-  });
+  const load = () => {
+    setIsWriting(false);
+
+    if (repoLink) {
+      const { fullLink } = normalizeUrl(repoLink);
+
+      dispatch(addRepoLink(repoLink));
+      dispatch(init(fullLink));
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRepoLink(e.target.value.trim());
+    setIsWriting(true);
+  };
+
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      load();
+    }
+  };
 
   useEffect(() => {
     if (!isWriting) {
@@ -62,15 +79,8 @@ const InputArea: React.FC = () => {
               'border-dark': !error,
             })}
             value={repoLink}
-            onChange={(e) => {
-              setRepoLink(e.target.value.trim());
-              setIsWriting(true);
-            }}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                load();
-              }
-            }}
+            onChange={handleChange}
+            onKeyDown={handleKeyUp}
           />
         </Col>
         <Col>
