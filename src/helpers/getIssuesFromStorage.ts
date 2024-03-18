@@ -1,5 +1,5 @@
-import { Column, Issue } from '../../types/Issue';
-import Issues from '../../types/Issues';
+import { Column, Issue } from '../types/Issue';
+import Issues from '../types/Issues';
 import parseDataFromStorage from './parseDataFromStorage';
 
 const getIssuesFromStorage = (repoLink: string) => {

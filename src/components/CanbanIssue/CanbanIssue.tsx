@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card } from 'react-bootstrap';
 import { Issue } from '../../types/Issue';
-import getIssueStatus from '../../utils/helpers/getTimeOfOpened';
+import getIssueStatus from '../../helpers/getTimeOfOpened';
 
 type Props = {
   issue: Issue

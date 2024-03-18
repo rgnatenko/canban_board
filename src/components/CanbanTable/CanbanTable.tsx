@@ -8,10 +8,10 @@ import { Column, Issue } from '../../types/Issue';
 import {
   useAppDispatch,
 } from '../../redux/reduxHooks/reduxHooks';
-import drag from '../../utils/helpers/drag';
+import drag from '../../helpers/drag';
 import CanbanIssuesList from '../CanbanIssuesList/CanbanIssuesList';
 import BreadCrumbs from '../BreadCrumbs/BreadCrumbs';
-import normalizeUrl from '../../utils/helpers/normalizeUrl';
+import normalizeUrl from '../../helpers/normalizeUrl';
 import { updateIssues } from '../../redux/features/issuesSlice';
 import { useIssues } from '../../redux/selectors';
 

@@ -1,5 +1,5 @@
 import { DraggableLocation } from 'react-beautiful-dnd';
-import { Column, Issue } from '../../types/Issue';
+import { Column, Issue } from '../types/Issue';
 import getColumnIssues from './getColumnIssues';
 
 type Params = {

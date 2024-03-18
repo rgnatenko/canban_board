@@ -2,9 +2,9 @@
 /* eslint-disable no-param-reassign */
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { IssuesState } from '../../types/IssuesState';
-import { client } from '../../utils/fetchClient/fetchClient';
+import { client } from '../../fetchClient';
 import { Column, Issue } from '../../types/Issue';
-import getIssuesFromStorage from '../../utils/helpers/getIssuesFromStorage';
+import getIssuesFromStorage from '../../helpers/getIssuesFromStorage';
 
 const initialState: IssuesState = {
   newIssues: [],

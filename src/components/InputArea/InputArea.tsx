@@ -14,7 +14,7 @@ import {
 } from '../../redux/reduxHooks/reduxHooks';
 import { useIssues } from '../../redux/selectors';
 import { addRepoLink, init } from '../../redux/features/issuesSlice';
-import normalizeUrl from '../../utils/helpers/normalizeUrl';
+import normalizeUrl from '../../helpers/normalizeUrl';
 // #endregion
 
 const InputArea: React.FC = () => {

@@ -1,5 +1,5 @@
-import { Column } from '../../types/Issue';
-import Issues from '../../types/Issues';
+import { Column } from '../types/Issue';
+import Issues from '../types/Issues';
 
 const getColumnIssues = (column: Column, {
   newIssues,
